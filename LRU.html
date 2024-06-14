@@ -8,7 +8,7 @@
     <script src="main.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
-      
+     
         * {
             margin: 0;
             padding: 0;
@@ -86,7 +86,7 @@
             cursor: pointer;
             display: none;
         }
-        
+
         .imageContainer {
             text-align: center;
             padding-top: 40px;
@@ -97,6 +97,10 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
+        }
+
+        span{
+            color: #5982f4;
         }
 
         .form-group {
@@ -139,10 +143,6 @@
             width: 100%;
         }
 
-        span{
-            color: #5982f4;
-        }
-
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
@@ -163,16 +163,14 @@
         .text-center {
             text-align: center;
         }
-
-        #bottom {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
     <header class="header">
         <a href="#" id="header-name"><span>Page </span>Replacement</a>
-        <i class="fas fa-bars" id="menu-icon"></i>
+
+        <i class="fas fa-bars" id="menu-icon"></i> 
+
         <nav class="navbar">
             <a href="Home.html">Home</a>
             <a href="FIFO.html">FIFO</a>
@@ -181,16 +179,16 @@
         </nav>
     </header>
     <div class="imageContainer" id="design">
-        <h1>Optimal Replacement</h1>
+        <h1>Least Recently Used (LRU)</h1>
         <div class="form-container">
             <form>
                 <div class="form-group">
                     <input type="number" id="frames" class="form-control" placeholder="Number of frames:">
                 </div>
                 <div class="form-group">
-                    <input type="text" id="rs" class="form-control" placeholder="Page reference string:">
+                    <input type="text" id="rs" class="form-control" placeholder="Page Reference string:">
                 </div>
-                <input type="button" class="btn" onclick="optimal()" value="Simulate" id="sim">
+                <input type="button" class="btn" onclick="lru()" value="Simulate" id="sim">
                 <input type="reset" class="btn" style="display:none;" onClick="window.location.reload()" id="resetbtn" value="Reset">
             </form>
             <div id="div1" class="table-hover"></div>
@@ -208,7 +206,8 @@ var ph;
 var f;
 var rs;
 var txt;
-function optimal() {
+
+function lru() {
     f = document.getElementById("frames").value;
     rs = document.getElementById("rs").value;
     var isnum = /^\d+$/.test(rs);
@@ -224,8 +223,8 @@ function optimal() {
     ph = 0;
     var k = 0;
     var l;
-    var farthest;
-    var index = -9999;
+    var least;
+    var index;
     var i, row = Number(f) + 1, j, col = rs.length;
     pages = new Array(row);
     for (i = 0; i < row; i++) pages[i] = new Array(col);
@@ -251,29 +250,18 @@ function optimal() {
             if (smallest != -1) {
                 pages[smallest][j] = rs[k];
             } else {
-                index = -9999;
+                index = 9999;
                 for (i = 0; i < row - 1; i++) {
-                    for (l = j + 1; l < col; l++) {
+                    for (l = j - 1; l >= 0; l--) {
                         if (pages[i][j] == rs[l]) {
-                            farthest = l;
+                            least = l;
                             break;
-                        } else {
-                            farthest = -2;
                         }
                     }
-                    if (index < farthest) {
-                        index = farthest;
-                    }
-                    if (farthest == -2) {
-                        break;
-                    }
+                    if (index > least) index = least;
                 }
-                if (farthest != -2) {
-                    for (i = 0; i < row - 1; i++) {
-                        if (pages[i][j] == rs[index]) {
-                            break;
-                        }
-                    }
+                for (i = 0; i < row - 1; i++) {
+                    if (pages[i][j] == rs[index]) break;
                 }
                 pages[i][j] = rs[k];
             }
@@ -307,8 +295,8 @@ function optimal() {
     }
     $table.append($tbody);
     $table.appendTo($("#div1"));
-    $("#sp1").html('<p style="text-align:center"><b>The number of page faults is:</b> <span style="color:red">' + pf + '</span></p>');
-    $("#sp2").html('<p style="text-align:center"><b>The number of page hits is:</b> <span style="color:green">' + ph + '</span></p>');
+    $("#sp1").html('<p style="text-align:center"><b>The no of page faults is:</b> <span style="color:red">' + pf + '</span></p>');
+    $("#sp2").html('<p style="text-align:center"><b>The no of page hits is:</b> <span style="color:green">' + ph + '</span></p>');
     document.getElementById('bottom').scrollIntoView();
     txt = txt + "\n";
     document.getElementById("sim").style.display = "none";

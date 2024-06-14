@@ -3,48 +3,220 @@
 <head>
     <title>Page Replacement</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="main.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+            border: none;
+            outline: none;
+            scroll-behavior: smooth;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #171F38;
+            width: 100%;
+            padding: 0.9rem 9%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #header-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            cursor: default;
+        }
+
+        .navbar {
+            display: flex;
+        }
+
+        .navbar a {
+            color: white;
+            font-size: 1.2rem;
+            margin-left: 4rem;
+            font-weight: 700;
+            position: relative;   
+        }
+
+        .navbar a::before {
+            content: ""; 
+            position: absolute;
+            background-color: #5982f4;
+            height: 3px;
+            width: 0;
+            left: 0;
+            bottom: -10px;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover::before {
+            width: 100%;
+        }
+
+        /* Hamburger icon for responsiveness */
+        #menu-icon {
+            font-size: 1.5em;
+            color: #5982f4;
+            cursor: pointer;
+            display: none;
+        }
+
+        .page {
+            margin-top: 100px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .imageContainer {
+            text-align: center;
+            padding-top: 40px;
+            width: 100%;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .form-group {
+            width: 25vw;
+            margin-bottom: 10px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        span{
+            color: #5982f4;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .table-hover {
+            width: 80vw;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-left:10%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        .text-center {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .sp-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #bottom {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand"><span style="color:paleturquoise;font-size: 20px;">Page Replacement</span></a>
+    <header class="header">
+        <a href="#" id="header-name"><span>Page </span>Replacement</a>
+        <i class="fas fa-bars" id="menu-icon"></i>
+        <nav class="navbar">
+            <a href="Home.html">Home</a>
+            <a href="FIFO.html">FIFO</a>
+            <a href="OPT.html">OPT</a>
+            <a href="LRU.html">LRU</a>
+        </nav>
+    </header>
+    <div class="page">
+        <div class="imageContainer" id="design">
+            <h1>First In First Out (FIFO)</h1>
+            <div class="form-container">
+                <form>
+                    <div class="form-group">
+                        <input type="number" id="frames" class="form-control" placeholder="Number of frames:">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="rs" class="form-control" placeholder="Page reference string:">
+                    </div>
+                    <input type="button" id="calcbtn" class="btn" onclick="fifo()" value="Simulate">
+                    <input type="reset" class="btn" style="display:none;" onClick="window.location.reload()" id="resetbtn" value="Reset">
+                </form>
             </div>
-            <div class="navbar-right">
-                <ul class="nav navbar-nav">
-                    <li class="nav-item"><a class="color-me nav-link-active" href="Home.html">HOME</a></li>
-                    <li class="nav-item"><a class="color-me nav-link-active" href="FIFO.html">FIFO</a></li>
-                    <li class="nav-item"><a class="color-me nav-link-active" href="OPT.html">OPT</a></li>
-                    <li class="nav-item"><a class="color-me nav-link-active" href="IRU.html">LRU</a></li>
-                </ul>
-            </div>
+            <div id="div" class="table-hover"></div>
+            <div id="sp1" class="text-center"></div>
+            <div id="sp2" class="text-center"></div>
         </div>
-    </nav>
-    <div class="imageContainer container-fluid" align="center" id="design">
-        <h1 style="padding-top:40px;">First In First Out (FIFO)</h1>
-        <form>
-            <div class="container-fluid">
-                <div class="form-group row" style="margin-left:40px;width:25vw;display:block">
-                    <input type="number" id="frames" class="form-control" placeholder="Number of frames:">
-                </div>
-                <div class="form-group row" style="margin-left:40px;width:25vw;display:block">
-                    <input type="text" id="rs" class="form-control" placeholder="Page reference string:">
-                </div>
-                <input type="button" id="calcbtn" style="margin-left:40px; margin-bottom:20px" class="btn btn-primary" onclick="fifo()" value="Simulate"><br>
-                <input type="reset" style="margin-left:40px; margin-bottom:20px; display:none;" class="btn btn-primary" onClick="window.location.reload()" id="resetbtn" value="Reset">
-                <br>
-                <div id="div" class="table-hover" style="width:80vw;margin:auto;text-align:center"></div>
-                <div id="sp1"></div>
-                <div id="sp2"></div>
-            </div>
-        </form>
+        <div id="bottom"></div>
     </div>
-    <div id="bottom"></div> 
     <script>
         var count = 0;
         var pages = [];
@@ -65,8 +237,6 @@
                 return;
             }
             document.getElementById("resetbtn").style.display = "block";
-            console.log(f);
-            console.log(rs);
             var prev;
             pf = 0;
             ph = 0;
@@ -103,19 +273,13 @@
                     pages[row - 1][j] = "PF";
                     k++;
                     pf++;
-                    console.log("pf=", pf);
                 } else {
                     ph++;
                     k++;
-                    console.log("ph=", ph);
                     pages[row - 1][j] = "PH";
                 }
             }
-            txt = " ";
-            var real;
-            var m = 0;
-            var $table = $("<table border='2'></table>");
-            $table.addClass('table');
+            var $table = $("<table></table>");
             $tbody = $("<tbody></tbody>");
             for (i = 0; i < row; i++) {
                 var line = $("<tr></tr>");
@@ -135,33 +299,12 @@
                 $table.append($tbody);
             }
             $table.appendTo($("#div"));
-            $("#sp1").html('<p style="text-align:center">' + "<b>The no of page faults is:</b>" + " " + '<span style="color:red">' + pf + '</span>' + '</p>');
-            $("#sp2").html('<p style="text-align:center">' + "<b>The no of page hits is:</b>" + " " + '<span style="color:green">' + ph + '</span>' + '</p>');
-            console.log(m);
+            $("#sp1").html('<p>' + "<b>The no of page faults is:</b>" + " " + '<span style="color:red">' + pf + '</span>' + '</p>');
+            $("#sp2").html('<p>' + "<b>The no of page hits is:</b>" + " " + '<span style="color:green">' + ph + '</span>' + '</p>');
             document.getElementById('bottom').scrollIntoView();
-            txt = txt + "\n";
-            console.log(txt);
-            console.log(txt.length);
             document.getElementById("calcbtn").style.display = "none";
             document.getElementById("frames").disabled = true;
             document.getElementById("rs").disabled = true;
-        }
-        function getRandomColor() {
-            m = m + 1;
-            var color = '';
-            if (m == 1) {
-                color = 'blue';
-            }
-            if (m == 2) {
-                color = 'yellow';
-            }
-            if (m == 3) {
-                color = 'pink';
-            }
-            if (m == 4) {
-                color = 'white';
-            }
-            return color;
         }
     </script>
 </body>
